@@ -1,0 +1,138 @@
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `orderStatuses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `statusMessage` varchar(255) NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `userId` int(11) DEFAULT NULL,
+  `sellerId` int(11) DEFAULT NULL,
+  `orderId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userId` (`userId`),
+  KEY `sellerId` (`sellerId`),
+  KEY `orderId` (`orderId`),
+  CONSTRAINT `orderStatuses_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `orderStatuses_ibfk_2` FOREIGN KEY (`sellerId`) REFERENCES `sellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `orderStatuses_ibfk_3` FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `orderDate` datetime NOT NULL,
+  `orderItem` varchar(255) NOT NULL,
+  `orderPrice` double NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `userId` int(11) DEFAULT NULL,
+  `sellerId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userId` (`userId`),
+  KEY `sellerId` (`sellerId`),
+  CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`sellerId`) REFERENCES `sellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `promos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `promoMessage` varchar(255) DEFAULT NULL,
+  `promoCode` varchar(255) NOT NULL,
+  `promoDiscount` varchar(255) NOT NULL,
+  `promoStartDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `promoEndDate` datetime NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `sellerId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `promoCode` (`promoCode`),
+  KEY `sellerId` (`sellerId`),
+  CONSTRAINT `promos_ibfk_1` FOREIGN KEY (`sellerId`) REFERENCES `sellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ratings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ratingScore` double NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `userId` int(11) DEFAULT NULL,
+  `sellerId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userId` (`userId`),
+  KEY `sellerId` (`sellerId`),
+  CONSTRAINT `ratings_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `ratings_ibfk_2` FOREIGN KEY (`sellerId`) REFERENCES `sellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reviews` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `reviewText` varchar(255) NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `userId` int(11) DEFAULT NULL,
+  `sellerId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userId` (`userId`),
+  KEY `sellerId` (`sellerId`),
+  CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`sellerId`) REFERENCES `sellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sellers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sellerName` varchar(255) DEFAULT NULL,
+  `sellerEmail` varchar(255) NOT NULL,
+  `sellerHashedPassword` varchar(255) NOT NULL,
+  `sellerBirthday` datetime DEFAULT NULL,
+  `sellerGender` enum('male','female') DEFAULT NULL,
+  `sellerAddress` varchar(255) DEFAULT NULL,
+  `sellerPhoneNumber` varchar(255) DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sellerEmail` (`sellerEmail`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transactions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `transactionPrice` double NOT NULL,
+  `transactionMessage` varchar(255) DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `userId` int(11) DEFAULT NULL,
+  `sellerId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userId` (`userId`),
+  KEY `sellerId` (`sellerId`),
+  CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `transactions_ibfk_2` FOREIGN KEY (`sellerId`) REFERENCES `sellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userName` varchar(255) DEFAULT NULL,
+  `userEmail` varchar(255) NOT NULL,
+  `userHashedPassword` varchar(255) NOT NULL,
+  `userBirthday` datetime DEFAULT NULL,
+  `userGender` enum('male','female') DEFAULT NULL,
+  `userAddress` varchar(255) DEFAULT NULL,
+  `userPhoneNumber` varchar(255) DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `userEmail` (`userEmail`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;

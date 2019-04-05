@@ -25,7 +25,12 @@ const Promo = sequelize.define('promo', {
     promoStartDate: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Date.now()
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP') 
+    },
+    promoEndDate: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        
     }
 })
 
