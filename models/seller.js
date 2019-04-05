@@ -2,37 +2,37 @@ const Sequelize = require('sequelize')
 const sequelize = require('../util/db/db')
 
 
-const User = sequelize.define('user', {
+const Seller = sequelize.define('seller', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
     },
-    userName: Sequelize.STRING,
-    userEmail: {
+    sellerName: Sequelize.STRING,
+    sellerEmail: {
         type: Sequelize.STRING,
         unique: true,
         allowNull: false
     },
-    userHashedPassword: {
+    sellerHashedPassword: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    userBirthday: {
+    sellerBirthday: {
         type: Sequelize.DATE
     },
-    userGender: {
+    sellerGender: {
         type: Sequelize.ENUM,
         values: ['male', 'female']
     },
-    userAddress: {
+    sellerAddress: {
         type: Sequelize.STRING
     },
-    userPhoneNumber: {
+    sellerPhoneNumber: {
         type: Sequelize.STRING
     }
 })
 
-module.exports = User;
+module.exports = Seller;
 

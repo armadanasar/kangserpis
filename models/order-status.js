@@ -2,26 +2,17 @@ const Sequelize = require('sequelize')
 const sequelize = require('../util/db/db')
 
 
-const Order = sequelize.define('order', {
+const OrderStatus = sequelize.define('orderStatus', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
     },
-    orderDate: {
-        type: Sequelize.DATE,
-        allowNull: false
-    },
-    orderItem: {
+    statusMessage: {
         type: Sequelize.STRING,
-        allowNull: false
-    },
-    orderPrice: {
-        type: Sequelize.DOUBLE,
         allowNull: false
     }
 })
 
-module.exports = Order;
-
+module.exports = OrderStatus;
