@@ -13,7 +13,21 @@ const Review = sequelize.define('review', {
         type: Sequelize.STRING,
         allowNull: false
     }
-})
+}
+// , {
+//     classMethods: {
+        
+//     }
+// }
+)
+// Review.associate = function(models) {
+//     // OrderStatus.belongsTo(models.Order)
+//     // Order.belongsTo(models.User)
+//     // Seller.hasMany(Order)
+//     // Order.belongsTo(models.Seller)   
+//     Review.belongsTo(models.User)
+//     Review.belongsTo(models.Seller)
 
+// }
 module.exports = Review;
 

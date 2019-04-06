@@ -17,7 +17,23 @@ const Transaction = sequelize.define('transaction', {
     transactionMessage: {
         type: Sequelize.STRING
     }
-})
+}
+// ,  {
+//     classMethods: {
+//         associate: 
+//     }
+// }
+)
+// Transaction.associate = function(models) {
+//     // OrderStatus.belongsTo(models.Order)
+//     // Order.belongsTo(models.User)
+//     // Seller.hasMany(Order)
+//     // Order.belongsTo(models.Seller)   
+//     Transaction.belongsTo(models.User)
+//     Transaction.belongsTo(models.Seller)
+//     Transaction.belonngsTo(models.Order)
+
+// }
 
 module.exports = Transaction;
 

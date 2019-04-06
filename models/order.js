@@ -21,7 +21,20 @@ const Order = sequelize.define('order', {
         type: Sequelize.DOUBLE,
         allowNull: false
     }
-})
+}
+// , {
+//     classMethods: {
+        
+//     }
+// }
+)
+
+// Order.associate= function(models) {
+//     Order.belongsTo(models.User)
+//     // Seller.hasMany(Order)
+//     Order.belongsTo(models.Seller)   
+//     Order.hasOne(models.OrderStatus)
+// }
 
 module.exports = Order;
 

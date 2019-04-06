@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../util/db/db')
-
+const utils = require('../util/utils')
 
 const Seller = sequelize.define('seller', {
     id: {
@@ -32,7 +32,18 @@ const Seller = sequelize.define('seller', {
     sellerPhoneNumber: {
         type: Sequelize.STRING
     }
-})
+}
+// , {
+//     classMethods: {
+        
+//     }
+// }
+)
 
+// Seller.associate= function(models) {
+//     Seller.hasMany(models.Order)   
+//     Seller.hasMany(models.OrderStatus)
+//     Seller.hasMany(model.Transaction)
+// }
 module.exports = Seller;
 

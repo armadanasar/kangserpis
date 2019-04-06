@@ -15,7 +15,23 @@ const Rating = sequelize.define('rating', {
         min: 0,
         max: 5
     }
-})
+}
+// , {
+//     classMethods: {
+        
+//     }
+// }
+)
+
+// Rating.associate = function(models) {
+//     // OrderStatus.belongsTo(models.Order)
+//     // Order.belongsTo(models.User)
+//     // Seller.hasMany(Order)
+//     // Order.belongsTo(models.Seller)   
+//     Rating.belongsTo(models.User)
+//     Rating.belongsTo(models.Seller)
+
+// }
 
 module.exports = Rating;
 

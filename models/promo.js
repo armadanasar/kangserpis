@@ -30,9 +30,24 @@ const Promo = sequelize.define('promo', {
     promoEndDate: {
         type: Sequelize.DATE,
         allowNull: false,
-        
+
     }
-})
+}
+// , {
+//     classMethods: {
+
+//     }
+// }
+)
+
+// Promo.associate= function(models) {
+//     // OrderStatus.belongsTo(models.Order)
+//     // Order.belongsTo(models.User)
+//     // Seller.hasMany(Order)
+//     // Order.belongsTo(models.Seller)   
+//     Promo.belongsTo(models.Seller)
+
+// }
 
 module.exports = Promo;
 

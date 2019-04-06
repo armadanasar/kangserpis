@@ -1,6 +1,15 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../util/db/db')
+// const utils = require('../util/utils')
+const {hashPassword} = require('../util/utils')
 
+const Seller = require('./seller')
+const OrderStatus = require('./order-status');
+const Promo = require('./promo');
+const Rating = require('./rating');
+const Review = require('./review');
+const Transaction = require('./transaction')
+const Order = require('./order')
 
 const User = sequelize.define('user', {
     id: {
@@ -32,7 +41,17 @@ const User = sequelize.define('user', {
     userPhoneNumber: {
         type: Sequelize.STRING
     }
-})
-
+}
+// , {
+//     classMethods: {
+//         associate: 
+//     }
+// }
+)
+// User.associate = function(models) {
+//     User.hasMany(models.Order)   
+//     User.hasMany(models.OrderStatus)
+//     User.hasMany(models.Transaction)
+// }
 module.exports = User;
 

@@ -40,7 +40,7 @@ module.exports = () => {
     Seller.hasMany(Transaction)
     Transaction.belongsTo(User)
     Transaction.belongsTo(Seller)
-
+    Transaction.belongsTo(Order)
     Promo.belongsTo(Seller)
 
 
