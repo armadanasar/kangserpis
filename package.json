@@ -15,6 +15,7 @@
     "config": "^3.0.1",
     "express": "^4.16.4",
     "graphql": "^14.2.0",
+    "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
     "sequelize": "^5.2.1",
@@ -27,5 +28,5 @@
   },
   "jest": {
     "testEnvironment": "node"
- }
+  }
 }

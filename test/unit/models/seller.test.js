@@ -41,6 +41,133 @@ describe('seller modelling', () => {
         }
     })  
 
+    it('should refuse to create a new seller given phone number previously used up in previous account', async() => {
+        let message = false
+        try {
+            let newSeller = await Seller.create(
+                {
+                    id: 1024,
+                    sellerName: "Miho Kaneko",
+                    sellerEmail: "miho@ggggggg.id",
+                    /**
+                     * This is done because no way to use async setter function in a sequelize model.
+                     * I know this is a clunky experience
+                     * Just live with it until they fixed it or I found another way to hack it round.
+                     */
+                    sellerHashedPassword: await utils.hashPassword("AIZAfefra"),
+                    sellerBirthday: Date.now(),
+                    sellerGender: 'female',
+                    sellerAddress: 'sultan agung',
+                    sellerPhoneNumber: '081255555555'
+                }
+            )
+
+            await newSeller.save()
+
+            let failingSeller = await Seller.create(
+                {
+                    id: 1024,
+                    sellerName: "Swift Taylor",
+                    sellerEmail: "taylor@s.id",
+                    /**
+                     * This is done because no way to use async setter function in a sequelize model.
+                     * I know this is a clunky experience
+                     * Just live with it until they fixed it or I found another way to hack it round.
+                     */
+                    sellerHashedPassword: await utils.hashPassword("AIZAfefra"),
+                    sellerBirthday: Date.now(),
+                    sellerGender: 'female',
+                    sellerAddress: 'sultan tajir',
+                    sellerPhoneNumber: '081255555555'
+                }
+            )
+
+            await failingSeller.save()
+        } catch (err) {
+            message = err;
+        }
+
+        expect(message).toBeTruthy()
+    }) 
+
+    it('should refuse to create a new seller given email address previously used up in previous account', async() => {
+        let message = false
+        try {
+            let newSeller = await Seller.create(
+                {
+                    id: 1024,
+                    sellerName: "Miho Kaneko",
+                    sellerEmail: "miho@ggggggg.id",
+                    /**
+                     * This is done because no way to use async setter function in a sequelize model.
+                     * I know this is a clunky experience
+                     * Just live with it until they fixed it or I found another way to hack it round.
+                     */
+                    sellerHashedPassword: await utils.hashPassword("AIZAfefra"),
+                    sellerBirthday: Date.now(),
+                    sellerGender: 'female',
+                    sellerAddress: 'sultan agung',
+                    sellerPhoneNumber: '081255555555'
+                }
+            )
+
+            await newSeller.save()
+
+            let failingSeller = await Seller.create(
+                {
+                    id: 1024,
+                    sellerName: "Miho Kaneko",
+                    sellerEmail: "miho@ggggggg.id",
+                    /**
+                     * This is done because no way to use async setter function in a sequelize model.
+                     * I know this is a clunky experience
+                     * Just live with it until they fixed it or I found another way to hack it round.
+                     */
+                    sellerHashedPassword: await utils.hashPassword("AIZAfefra"),
+                    sellerBirthday: Date.now(),
+                    sellerGender: 'female',
+                    sellerAddress: 'sultan agung',
+                    sellerPhoneNumber: '08562142222'
+                }
+            )
+
+            await failingSeller.save()
+        } catch (err) {
+            message = err;
+        }
+
+        expect(message).toBeTruthy()
+    }) 
+
+
+    it('should refuse to create a new seller given no name input given', async() => {
+        let message = false
+        try {
+            let newSeller = await Seller.create(
+                {
+                    id: 1024,
+                    sellerEmail: "miho@ggggggg.id",
+                    /**
+                     * This is done because no way to use async setter function in a sequelize model.
+                     * I know this is a clunky experience
+                     * Just live with it until they fixed it or I found another way to hack it round.
+                     */
+                    sellerHashedPassword: await utils.hashPassword("AIZAfefra"),
+                    sellerBirthday: Date.now(),
+                    sellerGender: 'female',
+                    sellerAddress: 'sultan agung',
+                    sellerPhoneNumber: '081255555555'
+                }
+            )
+
+            await newSeller.save()
+        } catch (err) {
+            message = err;
+        }
+
+        expect(message).toBeTruthy()
+    }) 
+
     it('should refuse to create a new seller given invalid gender value', async() => {
         let message = false
         try {

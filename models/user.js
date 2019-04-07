@@ -18,7 +18,10 @@ const User = sequelize.define('user', {
         autoIncrement: true,
         allowNull: false
     },
-    userName: Sequelize.STRING,
+    userName: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
     userEmail: {
         type: Sequelize.STRING,
         unique: true,
@@ -39,7 +42,9 @@ const User = sequelize.define('user', {
         type: Sequelize.STRING
     },
     userPhoneNumber: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
     }
 }
 // , {

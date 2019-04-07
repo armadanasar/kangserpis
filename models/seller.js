@@ -9,7 +9,10 @@ const Seller = sequelize.define('seller', {
         autoIncrement: true,
         allowNull: false
     },
-    sellerName: Sequelize.STRING,
+    sellerName: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
     sellerEmail: {
         type: Sequelize.STRING,
         unique: true,
@@ -30,7 +33,8 @@ const Seller = sequelize.define('seller', {
         type: Sequelize.STRING
     },
     sellerPhoneNumber: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
     }
 }
 // , {
