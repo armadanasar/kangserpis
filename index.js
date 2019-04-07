@@ -2,27 +2,26 @@ const config = require('config');
 const express = require('express');
 const app = express();
 const winston = require('winston');
-const sequelize = require('./util/db/db')
-const User = require('./models/user')
-const Seller = require('./models/seller')
-const Order = require('./models/order')
-// require('express-async-errors');
-// require('./startup/logging')();
+
+require('express-async-errors');
+require('./startup/logging')();
 // require('./startup/config')();
-// require('./startup/db')();
-// require('./startup/validation')();
-// require('./startup/routes')(app);
+require('./startup/routes')(app);
+require('./startup/db')();
 
-// const port = process.env.PORT || 3000;
-// const server = app.listen(port, () => {winston.info(`on port ${port}`)});
+const port = process.env.PORT || 3000;
 
-// module.exports = server;
+var server = app.listen(port, () => {winston.info(`on port ${port}`)});;
 
 
-console.log(config.get('database.databaseName'), config.get('database.username'), config.get('database.password'), {
-    dialect: config.get('database.dialect'),
-    host: config.get('database.host')
-  })
+
+module.exports = server;
+
+
+// console.log(config.get('database.databaseName'), config.get('database.username'), config.get('database.password'), {
+//     dialect: config.get('database.dialect'),
+//     host: config.get('database.host')
+//   })
 
 
 

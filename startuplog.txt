@@ -1,0 +1,36 @@
+Executing (default): DROP TABLE IF EXISTS `transactions`;
+Executing (default): DROP TABLE IF EXISTS `reviews`;
+Executing (default): DROP TABLE IF EXISTS `ratings`;
+Executing (default): DROP TABLE IF EXISTS `promos`;
+Executing (default): DROP TABLE IF EXISTS `orderStatuses`;
+Executing (default): DROP TABLE IF EXISTS `orders`;
+Executing (default): DROP TABLE IF EXISTS `users`;
+Executing (default): DROP TABLE IF EXISTS `sellers`;
+Executing (default): DROP TABLE IF EXISTS `sellers`;
+Executing (default): CREATE TABLE IF NOT EXISTS `sellers` (`id` INTEGER NOT NULL auto_increment , `sellerName` VARCHAR(255) NOT NULL, `sellerEmail` VARCHAR(255) NOT NULL UNIQUE, `sellerHashedPassword` VARCHAR(255) NOT NULL, `sellerBirthday` DATETIME, `sellerGender` ENUM('male', 'female'), `sellerAddress` VARCHAR(255), `sellerPhoneNumber` VARCHAR(255) NOT NULL, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;
+Executing (default): SHOW INDEX FROM `sellers`
+Executing (default): DROP TABLE IF EXISTS `users`;
+Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `userName` VARCHAR(255) NOT NULL, `userEmail` VARCHAR(255) NOT NULL UNIQUE, `userHashedPassword` VARCHAR(255) NOT NULL, `userBirthday` DATETIME, `userGender` ENUM('male', 'female'), `userAddress` VARCHAR(255), `userPhoneNumber` VARCHAR(255) NOT NULL UNIQUE, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;
+Executing (default): SHOW INDEX FROM `users`
+Executing (default): DROP TABLE IF EXISTS `orders`;
+Executing (default): CREATE TABLE IF NOT EXISTS `orders` (`id` INTEGER NOT NULL auto_increment , `orderDate` DATETIME NOT NULL, `orderItem` VARCHAR(255) NOT NULL, `orderPrice` DOUBLE PRECISION NOT NULL, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `userId` INTEGER, `sellerId` INTEGER, PRIMARY KEY (`id`), FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, FOREIGN KEY (`sellerId`) REFERENCES `sellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB;
+Executing (default): SHOW INDEX FROM `orders`
+Executing (default): DROP TABLE IF EXISTS `orderStatuses`;
+Executing (default): CREATE TABLE IF NOT EXISTS `orderStatuses` (`id` INTEGER NOT NULL auto_increment , `statusMessage` VARCHAR(255) NOT NULL, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `sellerId` INTEGER, `orderId` INTEGER, PRIMARY KEY (`id`), FOREIGN KEY (`sellerId`) REFERENCES `sellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB;
+Executing (default): SHOW INDEX FROM `orderStatuses`
+Executing (default): DROP TABLE IF EXISTS `promos`;
+Executing (default): CREATE TABLE IF NOT EXISTS `promos` (`id` INTEGER NOT NULL auto_increment , `promoMessage` VARCHAR(255), `promoCode` VARCHAR(255) NOT NULL UNIQUE, `promoDiscount` DOUBLE PRECISION NOT NULL, `promoStartDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, `promoEndDate` DATETIME NOT NULL, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `sellerId` INTEGER, PRIMARY KEY (`id`), FOREIGN KEY (`sellerId`) REFERENCES `sellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB;
+Executing (default): SHOW INDEX FROM `promos`
+Executing (default): DROP TABLE IF EXISTS `ratings`;
+Executing (default): CREATE TABLE IF NOT EXISTS `ratings` (`id` INTEGER NOT NULL auto_increment , `ratingScore` DOUBLE PRECISION NOT NULL, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `userId` INTEGER, `sellerId` INTEGER, `orderId` INTEGER, PRIMARY KEY (`id`), FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, FOREIGN KEY (`sellerId`) REFERENCES `sellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB;
+Executing (default): SHOW INDEX FROM `ratings`
+Executing (default): DROP TABLE IF EXISTS `reviews`;
+Executing (default): CREATE TABLE IF NOT EXISTS `reviews` (`id` INTEGER NOT NULL auto_increment , `reviewText` VARCHAR(255) NOT NULL, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `userId` INTEGER, `sellerId` INTEGER, `orderId` INTEGER, PRIMARY KEY (`id`), FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, FOREIGN KEY (`sellerId`) REFERENCES `sellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB;
+Executing (default): SHOW INDEX FROM `reviews`
+Executing (default): DROP TABLE IF EXISTS `transactions`;
+Executing (default): CREATE TABLE IF NOT EXISTS `transactions` (`id` INTEGER NOT NULL auto_increment , `transactionPrice` DOUBLE PRECISION NOT NULL, `transactionMessage` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `userId` INTEGER, `sellerId` INTEGER, `orderId` INTEGER, PRIMARY KEY (`id`), FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, FOREIGN KEY (`sellerId`) REFERENCES `sellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB;
+Executing (default): SHOW INDEX FROM `transactions`
+{ id: 1,
+  userPhoneNumber: '+62777777777',
+  role: 'user',
+  iat: 1554634429 }
