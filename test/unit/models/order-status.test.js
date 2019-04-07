@@ -1,6 +1,7 @@
 const User = require('../../../models/user')
 const Seller = require('../../../models/seller')
 const Order = require('../../../models/order')
+const OrderStatus = require('../../../models/order-status')
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const sequelize = require('../../../util/db/db')
@@ -11,14 +12,15 @@ const boilerplate = require('../../boilerplate')
 // const FAKE_USER_ID = 111111
 // const FAKE_SELLER_ID = 111112
 // const FAKE_ORDER_ID = 111113
-const {FAKE_USER_ID, FAKE_SELLER_ID, FAKE_ORDER_ID} = require('./modelTestConstants')
+// const FAKE_ORDER_STATUS_ID = 111114
 
+const {FAKE_USER_ID, FAKE_SELLER_ID, FAKE_ORDER_ID, FAKE_ORDER_STATUS_ID} = require('./modelTestConstants')
 
 jest.setTimeout(30000)
-describe('order modelling', () => {
+describe('order status modelling', () => {
     beforeEach(boilerplate.dbTestInit)
 
-    it('should make a new order with correct associations', async () => {
+    it('should make a new order status with correct associations', async () => {
 
         try {
             let fakeUser = await User.create(
@@ -79,11 +81,30 @@ describe('order modelling', () => {
             
             expect(fakeOrderUser.id).toBe(FAKE_USER_ID)
             expect(fakeOrderSeller.id).toBe(FAKE_SELLER_ID)
-            expect(fetchedOrder.orderItem).toBe("Fix my iPhone, Louis Rossmann!")
-            expect(fetchedOrder.orderPrice).toBe(400.0)
+        
+        
+            let newOrderStatus = await OrderStatus.create({
+                id: FAKE_ORDER_STATUS_ID,
+                statusMessage: "hapenya udah dibongkar, ancur semua!"
+            })
+
+            //associate it to respective order and seller
+            newOrderStatus.setOrder(fetchedOrder)
+            newOrderStatus.setSeller(fakeOrderSeller)
+
+            await newOrderStatus.save()
+
+            let fetchedOrderStatus = await OrderStatus.findByPk(FAKE_ORDER_STATUS_ID);
+        
+            let fakeOrderStatusOrder = await fetchedOrderStatus.getOrder()
+            let fakeOrderStatusSeller = await fetchedOrderStatus.getSeller()
+
+            expect(fakeOrderStatusOrder.id).toBe(FAKE_ORDER_ID)
+            expect(fakeOrderStatusSeller.id).toBe(FAKE_SELLER_ID)
+            expect(fetchedOrderStatus.statusMessage).toBe("hapenya udah dibongkar, ancur semua!")
         }
         catch (err) {
-            console.log("error order test: ", err)
+            console.log("error order status model test: ", err)
             throw err;
         }
     }) 

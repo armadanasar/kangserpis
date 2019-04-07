@@ -8,16 +8,7 @@ const dbinit = require('../../../startup/db')
 jest.setTimeout(30000)
 const boilerplate = require('../../boilerplate')
 describe('user modelling', () => {
-    beforeEach( /*(done) => {
-        sequelize.query('SET FOREIGN_KEY_CHECKS = 0', { raw: true })
-        .then(() => {
-            return sequelize.sync({force: true})
-        })
-        .then(async () => {
-            done()
-        })
-        .catch(err => console.log("sync err: ", err))
-    }*/ boilerplate.dbTestInit)
+    beforeEach(boilerplate.dbTestInit)
     it('should create a new user', async() => {
         try {
             let newUser = await User.create(
@@ -43,9 +34,15 @@ describe('user modelling', () => {
             let createdUser = await User.findByPk(999)
 
             expect(createdUser.userName).toBe("Miho Kaneko")
+            expect(createdUser.userEmail).toBe("miho@ggggggg.id")
             expect(createdUser.userHashedPassword).toEqual(expect.not.stringContaining("AIZAfefra"))
+            expect(createdUser.userGender).toBe('female')
+            expect(createdUser.userAddress).toBe('sultan agung')
+            expect(createdUser.userPhoneNumber).toBe('081255555555')
+
         } catch (err) {
-            console.log(err)
+            console.log("user model test error: ", err)
+            throw err
         }
     }) 
 

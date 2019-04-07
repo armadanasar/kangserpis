@@ -1,24 +1,26 @@
 const User = require('../../../models/user')
 const Seller = require('../../../models/seller')
 const Order = require('../../../models/order')
+const OrderStatus = require('../../../models/order-status')
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const sequelize = require('../../../util/db/db')
 const utils = require('../../../util/utils')
 const dbinit = require('../../../startup/db')
+const Transaction = require('../../../models/transaction')
 // const User = 
 const boilerplate = require('../../boilerplate')
 // const FAKE_USER_ID = 111111
 // const FAKE_SELLER_ID = 111112
 // const FAKE_ORDER_ID = 111113
-const {FAKE_USER_ID, FAKE_SELLER_ID, FAKE_ORDER_ID} = require('./modelTestConstants')
-
+// const FAKE_ORDER_STATUS_ID = 111114
+const {FAKE_USER_ID, FAKE_SELLER_ID, FAKE_ORDER_ID, FAKE_TRANSACTION_ID} = require('./modelTestConstants')
 
 jest.setTimeout(30000)
-describe('order modelling', () => {
+describe('transaction modelling', () => {
     beforeEach(boilerplate.dbTestInit)
 
-    it('should make a new order with correct associations', async () => {
+    it('should make a new transaction with correct associations', async () => {
 
         try {
             let fakeUser = await User.create(
@@ -79,11 +81,36 @@ describe('order modelling', () => {
             
             expect(fakeOrderUser.id).toBe(FAKE_USER_ID)
             expect(fakeOrderSeller.id).toBe(FAKE_SELLER_ID)
-            expect(fetchedOrder.orderItem).toBe("Fix my iPhone, Louis Rossmann!")
-            expect(fetchedOrder.orderPrice).toBe(400.0)
+        
+            let newTransaction = await Transaction.create({
+                id: FAKE_TRANSACTION_ID,
+                transactionPrice: fetchedOrder.orderPrice,
+                transactionMessage: fetchedOrder.orderItem
+            })
+
+            newTransaction.setOrder(fetchedOrder)
+            newTransaction.setUser(fakeOrderUser)
+            newTransaction.setSeller(fakeOrderSeller)
+
+            //associate it to respective order and seller
+            
+            await newTransaction.save()
+
+            let fetchedTransaction = await Transaction.findByPk(FAKE_TRANSACTION_ID);
+        
+            let fakeTransactionOrder = await fetchedTransaction.getOrder()
+            let fakeTransactionSeller = await fetchedTransaction.getSeller()
+            let fakeTransactionUser = await fetchedTransaction.getUser()
+
+            expect(fakeTransactionOrder.id).toBe(FAKE_ORDER_ID)
+            expect(fakeTransactionSeller.id).toBe(FAKE_SELLER_ID)
+            expect(fakeTransactionUser.id).toBe(FAKE_USER_ID)
+            expect(fetchedTransaction.transactionPrice).toBe(fetchedOrder.orderPrice)
+            expect(fetchedTransaction.transactionMessage).toBe(fetchedOrder.orderItem)
+            
         }
         catch (err) {
-            console.log("error order test: ", err)
+            console.log("error order status model test: ", err)
             throw err;
         }
     }) 

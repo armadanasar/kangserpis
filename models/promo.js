@@ -19,7 +19,7 @@ const Promo = sequelize.define('promo', {
     },
     /**Arbitrary js for this is cool btw :) */
     promoDiscount: {
-        type: Sequelize.STRING,
+        type: Sequelize.DOUBLE,
         allowNull: false
     },
     promoStartDate: {
@@ -30,7 +30,7 @@ const Promo = sequelize.define('promo', {
     promoEndDate: {
         type: Sequelize.DATE,
         allowNull: false,
-
+        
     }
 }
 // , {

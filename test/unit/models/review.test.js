@@ -1,6 +1,8 @@
 const User = require('../../../models/user')
 const Seller = require('../../../models/seller')
 const Order = require('../../../models/order')
+const Review = require('../../../models/review')
+// const OrderStatus = require('../../../models/order-status')
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const sequelize = require('../../../util/db/db')
@@ -11,14 +13,15 @@ const boilerplate = require('../../boilerplate')
 // const FAKE_USER_ID = 111111
 // const FAKE_SELLER_ID = 111112
 // const FAKE_ORDER_ID = 111113
-const {FAKE_USER_ID, FAKE_SELLER_ID, FAKE_ORDER_ID} = require('./modelTestConstants')
-
+// const FAKE_ORDER_STATUS_ID = 111114
+// const FAKE_REVIEW_ID = 111115
+const {FAKE_USER_ID, FAKE_SELLER_ID, FAKE_ORDER_ID, FAKE_REVIEW_ID} = require('./modelTestConstants')
 
 jest.setTimeout(30000)
-describe('order modelling', () => {
+describe('review modelling', () => {
     beforeEach(boilerplate.dbTestInit)
 
-    it('should make a new order with correct associations', async () => {
+    it('should make a new review with correct associations', async () => {
 
         try {
             let fakeUser = await User.create(
@@ -79,11 +82,32 @@ describe('order modelling', () => {
             
             expect(fakeOrderUser.id).toBe(FAKE_USER_ID)
             expect(fakeOrderSeller.id).toBe(FAKE_SELLER_ID)
-            expect(fetchedOrder.orderItem).toBe("Fix my iPhone, Louis Rossmann!")
-            expect(fetchedOrder.orderPrice).toBe(400.0)
+        
+        
+            let newReview = await Review.create({
+                id: FAKE_REVIEW_ID,
+                reviewText: "woi ganti hape gw makin ancur lu benerin!"
+            })
+
+            newReview.setOrder(fetchedOrder)
+            newReview.setSeller(fakeSeller)
+            newReview.setUser(fakeUser)
+
+            await newReview.save()
+
+            let fetchedReview = await Review.findByPk(FAKE_REVIEW_ID);
+        
+            let fakeReviewOrder = await fetchedReview.getOrder()
+            let fakeReviewSeller = await fetchedReview.getSeller()
+            let fakeReviewUser = await fetchedReview.getUser()
+
+            expect(fakeReviewOrder.id).toBe(FAKE_ORDER_ID)
+            expect(fakeReviewSeller.id).toBe(FAKE_SELLER_ID)
+            expect(fakeReviewUser.id).toBe(FAKE_USER_ID)
+            expect(fetchedReview.reviewText).toMatch("woi ganti hape gw makin ancur lu benerin!")
         }
         catch (err) {
-            console.log("error order test: ", err)
+            console.log("error review model test: ", err)
             throw err;
         }
     }) 

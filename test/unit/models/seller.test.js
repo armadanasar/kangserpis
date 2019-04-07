@@ -8,17 +8,7 @@ const dbinit = require('../../../startup/db')
 jest.setTimeout(30000)
 const boilerplate = require('../../boilerplate')
 describe('seller modelling', () => {
-    beforeEach( /*(done) => {
-        // require('../../../util/db/enforceRelations')()
-        sequelize.query('SET FOREIGN_KEY_CHECKS = 0', { raw: true })
-        .then(() => {
-            return sequelize.sync({force: true})
-        })
-        .then(async () => {
-            done()
-        })
-        .catch(err => console.log("sync err: ", err))
-    }*/boilerplate.dbTestInit)
+    beforeEach(boilerplate.dbTestInit)
     it('should create a new seller', async() => {
         try {
             let newSeller = await Seller.create(
@@ -39,10 +29,44 @@ describe('seller modelling', () => {
             let createdSeller = await Seller.findByPk(434)
 
             expect(createdSeller.sellerName).toBe("Miho Kaneko")
-            expect(createdSeller.userHashedPassword).toEqual(expect.not.stringContaining("AIZAfefra"))
+            expect(createdSeller.sellerEmail).toBe("miho@ggggggg.id")
+            expect(createdSeller.sellerHashedPassword).toEqual(expect.not.stringContaining("AIZAfefra"))
+            expect(createdSeller.sellerGender).toBe('female')
+            expect(createdSeller.sellerAddress).toBe('sultan agung')
+            expect(createdSeller.sellerPhoneNumber).toBe('081255555555')
         }
         catch(err) {
-            console.log(err)
+            console.log("error seller model test", err)
+            throw err
         }
     })  
+
+    it('should refuse to create a new seller given invalid gender value', async() => {
+        let message = false
+        try {
+            let newSeller = await Seller.create(
+                {
+                    id: 1024,
+                    sellerName: "Miho Kaneko",
+                    sellerEmail: "miho@ggggggg.id",
+                    /**
+                     * This is done because no way to use async setter function in a sequelize model.
+                     * I know this is a clunky experience
+                     * Just live with it until they fixed it or I found another way to hack it round.
+                     */
+                    sellerHashedPassword: await utils.hashPassword("AIZAfefra"),
+                    sellerBirthday: Date.now(),
+                    sellerGender: 'laptops',
+                    sellerAddress: 'sultan agung',
+                    sellerPhoneNumber: '081255555555'
+                }
+            )
+
+            await newSeller.save()
+        } catch (err) {
+            message = err;
+        }
+
+        expect(message).toBeTruthy()
+    }) 
 })

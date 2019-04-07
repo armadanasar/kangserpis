@@ -1,6 +1,9 @@
 const User = require('../../../models/user')
 const Seller = require('../../../models/seller')
 const Order = require('../../../models/order')
+// const Review = require('../../../models/review')
+const Rating = require('../../../models/rating')
+// const OrderStatus = require('../../../models/order-status')
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const sequelize = require('../../../util/db/db')
@@ -11,14 +14,14 @@ const boilerplate = require('../../boilerplate')
 // const FAKE_USER_ID = 111111
 // const FAKE_SELLER_ID = 111112
 // const FAKE_ORDER_ID = 111113
-const {FAKE_USER_ID, FAKE_SELLER_ID, FAKE_ORDER_ID} = require('./modelTestConstants')
-
+// const FAKE_RATING_ID = 111116
+const {FAKE_USER_ID, FAKE_SELLER_ID, FAKE_ORDER_ID, FAKE_RATING_ID} = require('./modelTestConstants')
 
 jest.setTimeout(30000)
-describe('order modelling', () => {
+describe('rating modelling', () => {
     beforeEach(boilerplate.dbTestInit)
 
-    it('should make a new order with correct associations', async () => {
+    it('should make a new rating with correct associations', async () => {
 
         try {
             let fakeUser = await User.create(
@@ -79,11 +82,32 @@ describe('order modelling', () => {
             
             expect(fakeOrderUser.id).toBe(FAKE_USER_ID)
             expect(fakeOrderSeller.id).toBe(FAKE_SELLER_ID)
-            expect(fetchedOrder.orderItem).toBe("Fix my iPhone, Louis Rossmann!")
-            expect(fetchedOrder.orderPrice).toBe(400.0)
+        
+        
+            let newRating = await Rating.create({
+                id: FAKE_RATING_ID,
+                ratingScore: 5.0
+            })
+
+            newRating.setOrder(fetchedOrder)
+            newRating.setSeller(fakeSeller)
+            newRating.setUser(fakeUser)
+
+            await newRating.save()
+
+            let fetchedRating = await Rating.findByPk(FAKE_RATING_ID);
+        
+            let fakeRatingOrder = await fetchedRating.getOrder()
+            let fakeRatingSeller = await fetchedRating.getSeller()
+            let fakeRatingUser = await fetchedRating.getUser()
+            // throw new Error("")
+            expect(fakeRatingOrder.id).toBe(FAKE_ORDER_ID)
+            expect(fakeRatingSeller.id).toBe(FAKE_SELLER_ID)
+            expect(fakeRatingUser.id).toBe(FAKE_USER_ID)
+            expect(fetchedRating.ratingScore).toBe(5.0)
         }
         catch (err) {
-            console.log("error order test: ", err)
+            console.log("error rating model test: ", err)
             throw err;
         }
     }) 

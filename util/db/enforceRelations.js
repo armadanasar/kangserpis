@@ -22,27 +22,40 @@ module.exports = () => {
     /**
      * Order -> OrderStatus
      */
-    User.hasMany(OrderStatus)
+    // User.hasMany(OrderStatus)
     Seller.hasMany(OrderStatus)
-    Order.hasOne(OrderStatus)
+    Order.hasMany(OrderStatus)
     OrderStatus.belongsTo(Order)
+    OrderStatus.belongsTo(Seller)
 
     /**
-     * User -> Review <- Seler
+     * User -> Review <- Seller
      */
+    //it only makes sense when a review is given from user a to seller b on the order x
+    
     Review.belongsTo(User)
     Review.belongsTo(Seller)
+    Review.belongsTo(Order)
+    // Order.hasOne(Review)
+    User.hasMany(Review)
+    Seller.hasMany(Review)
+
 
     Rating.belongsTo(User)
     Rating.belongsTo(Seller)
+    Rating.belongsTo(Order)
+    // Order.hasOne(Rating)
+    User.hasMany(Rating)
+    Seller.hasMany(Rating)
 
     User.hasMany(Transaction)
     Seller.hasMany(Transaction)
     Transaction.belongsTo(User)
     Transaction.belongsTo(Seller)
     Transaction.belongsTo(Order)
-    Promo.belongsTo(Seller)
 
+    Promo.belongsTo(Seller)
+    Seller.hasMany(Promo)
 
 }
 
