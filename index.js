@@ -7,15 +7,17 @@ require('express-async-errors');
 require('./startup/logging')();
 // require('./startup/config')();
 require('./startup/routes')(app);
-require('./startup/db')();
 
 const port = process.env.PORT || 3000;
 
-var server = app.listen(port, () => {winston.info(`on port ${port}`)});;
+var server;
+
+require('./startup/db')(() => {
+  require('./server').listen(port, () => {console.log(`on port ${port}`)})
+});
 
 
-
-module.exports = server;
+// module.exports = server;
 
 
 // console.log(config.get('database.databaseName'), config.get('database.username'), config.get('database.password'), {
