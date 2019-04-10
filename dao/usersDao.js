@@ -34,7 +34,7 @@ usersDao.createNewUser = async (userDetails) => {
 
         return result;
     } catch (err) {
-        return err;
+        throw err;
     }
 }
 
@@ -54,7 +54,7 @@ usersDao.authenticateUser = async (phoneNumber, password) => {
         }
     
     } catch(err) {
-        return err;
+        throw err;
     }
 }
 

@@ -7,15 +7,33 @@ const jwt = require('jsonwebtoken');
 const sellersDao = require('../dao/sellersDao')
 const validateJwt = require('../middleware/auth')
 
-router.post('/create', (req, res) => {
+router.post('/create', async (req, res) => {
+    try {
+        let result = await sellersDao.createNewSeller(req.body);
 
+        res.send(result)
+    } catch(err) {
+        res.status(500).send(err)
+    }
 })
 
-router.post('/authenticate', (req, res) => {
-
+router.post('/authenticate', async (req, res) => {
+    try {
+        let token = await sellersDao.authenticateSeller(req.body.phoneNumber, req.body.password)
+    
+        if (token) {
+            res.send({
+                token: token
+            })
+        } else {
+            res.status(400).send("invalid password")
+        }
+    } catch(err) {
+        res.status(500).send(err)
+    }
 })
 
-router.get('/authenticationStatus', validateJwt, (req, res) => {
+router.get('/authenticationStatus', validateJwt, async (req, res) => {
     if (req.seller) {
         res.send(req.seller)
     } else {
