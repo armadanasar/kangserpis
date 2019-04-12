@@ -10,7 +10,7 @@ const validations = require('./validations/users')
 
 router.post('/create', async (req, res) => {
     try {
-        let {error} = validations['/create']()
+        let {error} = validations['/create'](req.body)
 
         if (error) {
             return res.status(400).send(error)
@@ -26,7 +26,7 @@ router.post('/create', async (req, res) => {
 
 router.post('/authenticate', async (req, res) => {
     try {
-        let {error} = validations['/authenticate']()
+        let {error} = validations['/authenticate'](req.body)
 
         if (error) {
             return res.status(400).send(error)

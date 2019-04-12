@@ -56,6 +56,33 @@ describe('sellers api test', () => {
         
     })
 
+    it('should refuse to make new seller on invalid input', async (done) => {
+        let sellerDetails = {
+            sellerName: "Miho Kaneko",
+            sellerEmail: "miho@jjj7j.id",
+            /**
+             * This is done because no way to use async setter function in a sequelize model.
+             * I know this is a clunky experience
+             * Just live with it until they fixed it or I found another way to hack it round.
+             */
+            // sellerPassword: "AIZA",
+            sellerBirthday: Date.now(),
+            sellerGender: 'fefefrr',
+            sellerAddress: 'sultan agung',
+            sellerPhoneNumber: '085612345678'
+        }
+        client
+            .post('/api/v1/sellers/create')
+            .send(sellerDetails)
+            .end((err, res) => {
+                console.log("result body: ", res.body)
+                expect(res.status).toBe(400)       
+                done() 
+            })    
+        
+    })
+
+
     it('should authenticate', async (done) => {
         // let sellerDetails = {
         //     sellerName: "Miho Kaneko",
