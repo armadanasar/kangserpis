@@ -6,6 +6,7 @@ const _ = require('lodash')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const config = require('config')
+const Op = require('sequelize').Op
 var usersDao = {}
 
 //fungsi:
@@ -19,6 +20,24 @@ usersDao.createNewUser = async (userDetails) => {
 
     // if (error)
         // throw new Error("")
+    let existingUser = await User.findAll({
+        where: {
+        [Op.or]: [
+            {
+                userPhoneNumber: userDetails.userPhoneNumber
+                
+            }, 
+            {
+                userEmail: userDetails.userEmail
+            }
+        ]
+    }
+    })
+    // console.log(existingSeller)
+    if (existingUser.length > 0) {
+        return false;
+    }
+
     try {
         let newUser = await User.create({
             userName: userDetails.userName,

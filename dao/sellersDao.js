@@ -7,6 +7,7 @@ const config = require('config')
 const bcrypt = require('bcrypt')
 var sellersDao = {}
 const Seller = require('../models/seller')
+const Op = require('sequelize').Op;
 //fungsi:
 //make seller
 //edit seller
@@ -15,6 +16,26 @@ const Seller = require('../models/seller')
 
 sellersDao.createNewSeller = async (sellerDetails) => {
     try {
+        console.log(sellerDetails.sellerPhoneNumber)
+        console.log(sellerDetails.sellerEmail)
+        let existingSeller = await Seller.findAll({
+            where: {
+            [Op.or]: [
+                {
+                    sellerPhoneNumber: sellerDetails.sellerPhoneNumber
+                    
+                }, 
+                {
+                    sellerEmail: sellerDetails.sellerEmail
+                }
+            ]
+        }
+        })
+        // console.log(existingSeller)
+        if (existingSeller.length > 0) {
+            return false;
+        }
+
         let newSeller = await Seller.create({
             sellerName: sellerDetails.sellerName,
             sellerEmail: sellerDetails.sellerEmail,
@@ -49,6 +70,20 @@ sellersDao.authenticateSeller = async (phoneNumber, password) => {
         }
     
     } catch(err) {
+        return err;
+    }
+}
+
+sellersDao.getSellers = async (pageNo, pageSize) => {
+    try {
+        let result = await Seller.findAll({   
+            attributes: ['sellerName', 'sellerPhoneNumber', 'sellerEmail'], 
+            offset: pageNo*pageSize, 
+            limit: pageSize 
+        })
+
+        return result;
+    } catch (err) {
         return err;
     }
 }

@@ -17,10 +17,14 @@ router.post('/create', async (req, res) => {
         }
 
         let result = await sellersDao.createNewSeller(req.body);
+        
+        if (!result) {
+            return res.status(400).send({'error': 'user exists!'})
+        }
 
-        res.send(result)
+        return res.send(result)
     } catch(err) {
-        res.status(500).send(err)
+        return res.status(500).send(err)
     }
 })
 
@@ -54,5 +58,25 @@ router.get('/authenticationStatus', validateJwt, async (req, res) => {
     }
 })
 
+router.post('/showAll', validateJwt, async(req, res) => {
+    try {
+        let {error} = validations['/showAll'](req.body)
+        
+        if (error) {
+            return res.status(400).send(error)
+        }
+
+        let result = await sellersDao.getSellers(req.body.pageNo, req.body.pageSize)
+    
+        if (!result) {
+            return res.status(500).send('unknown error!')
+        }
+
+        return res.send(result)
+    } catch(err) {
+        console.log(err)
+        return res.status(500).send(err)
+    }
+})
 
 module.exports = router;

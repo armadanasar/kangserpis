@@ -17,7 +17,10 @@ router.post('/create', async (req, res) => {
         }
 
         let result = await usersDao.createNewUser(req.body);
-
+        
+        if (!result) {
+            return res.status(400).send({'error': 'user exists!'})
+        }
         return res.send(result)
     } catch(err) {
         return res.status(500).send(err)

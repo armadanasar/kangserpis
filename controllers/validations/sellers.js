@@ -32,6 +32,13 @@ sellerValidationSchemas['/authenticate'] = (requestBody) => {
     return Joi.validate(requestBody, validationSchema)
 }
 
+sellerValidationSchemas['/showAll'] = (requestBody) => {
+    const validationSchema = {
+        pageNo: Joi.number().min(0),
+        pageSize: Joi.number().min(1)
+    }
 
+    return Joi.validate(requestBody, validationSchema)
+}
 module.exports = sellerValidationSchemas
 
