@@ -12,11 +12,11 @@ const Order = require('../models/order')
 const Transaction = require('../models/transaction')
 const Op = require('sequelize').Op;
 
-
+//TODO: replace this with a transaction.
 ordersDao.createNewOrder = async(orderDetails) => {
     try {
-        let orderingUser = await User.findByPk(orderDetails.userId)
-        let orderSellerTarget = await Seller.findByPk(orderDetails.sellerId)
+        let user = await User.findByPk(orderDetails.userId)
+        let seller = await Seller.findByPk(orderDetails.sellerId)
 
         let result = await Order.create({
             orderItem: orderDetails.orderItem,
@@ -24,8 +24,8 @@ ordersDao.createNewOrder = async(orderDetails) => {
             orderDate: Date.now()
         })
 
-        result.setUser(orderingUser)
-        result.setSeller(orderSellerTarget)
+        result.setUser(user)
+        result.setSeller(seller)
 
         await result.save()
 
@@ -36,5 +36,36 @@ ordersDao.createNewOrder = async(orderDetails) => {
     }
 }
 
+ordersDao.getUserOrders = async (userId, pageNo, pageSize) => {
+    try {
+        let userOrders = await Order.findAll({   
+            where: {
+                userId: userId
+            },
+            offset: pageNo*pageSize, 
+            limit: pageSize 
+        })
+
+        return userOrders;
+    } catch (err) {
+        return err;
+    }
+}
+
+ordersDao.getSellerOrders = async (sellerId, pageNo, pageSize) => {
+    try {
+        let userOrders = await Order.findAll({   
+            where: {
+                sellerId: sellerId
+            },
+            offset: pageNo*pageSize, 
+            limit: pageSize 
+        })
+
+        return userOrders;
+    } catch (err) {
+        return err;
+    }
+}
 
 module.exports = ordersDao;

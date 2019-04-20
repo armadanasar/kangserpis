@@ -15,6 +15,17 @@ var usersDao = {}
 //authenticate user and make jwt
 //verify jwt and give user access to their data
 
+usersDao.getUserByPk = async(pkId) => {
+    try {
+        let user = await User.findByPk(pkId)
+
+        if (user) return user
+        else return false
+    } catch (err) {
+        return err;
+    }
+}
+
 usersDao.createNewUser = async (userDetails) => {
     // let {error} = userValidations.createNewUser(userDetails)
 

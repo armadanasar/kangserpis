@@ -13,6 +13,16 @@ const Op = require('sequelize').Op;
 //edit seller
 //authenticate seller and make jwt
 //verify jwt and give seller access to their data
+sellersDao.getSellerByPk = async(pkId) => {
+    try {
+        let seller = await Seller.findByPk(pkId)
+
+        if (seller) return seller
+        else return false
+    } catch (err) {
+        return err;
+    }
+}
 
 sellersDao.createNewSeller = async (sellerDetails) => {
     try {
