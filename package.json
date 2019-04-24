@@ -23,6 +23,7 @@
     "lodash": "^4.17.11",
     "nodemon": "^1.18.11",
     "sequelize": "^5.2.1",
+    "swagger-ui-express": "^4.0.2",
     "tedious": "^6.1.0",
     "winston": "^3.2.1"
   },
