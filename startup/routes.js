@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 // const rentals = require('../controllers/rentals');
 const usersController = require('../controllers/users');
 const sellersController = require('../controllers/sellers');
+const ordersController = require('../controllers/orders');
 const auth = require('../middleware/auth');
 const error = require('../middleware/error');
 
@@ -13,5 +14,6 @@ module.exports = function(app) {
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use('/api/v1/users', usersController);
     app.use('/api/v1/sellers', sellersController)
+    app.use('/api/v1/orders', ordersController)
     app.use(error);
 }

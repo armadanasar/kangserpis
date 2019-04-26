@@ -43,7 +43,7 @@ describe('sellers api test', () => {
             sellerBirthday: Date.now(),
             sellerGender: 'female',
             sellerAddress: 'sultan agung',
-            sellerPhoneNumber: '085612345678'
+            sellerPhoneNumber: '085612345678a'
         }
         client
             .post('/api/v1/sellers/create')
@@ -209,5 +209,79 @@ describe('sellers api test', () => {
             // })   
     })
     // })
+
+    it('should make new order', async (done) => {
+        let sellerDetails = {
+            sellerName: "Miho Kaneko",
+            sellerEmail: "miho@jjj7j.id",
+            /**
+             * This is done because no way to use async setter function in a sequelize model.
+             * I know this is a clunky experience
+             * Just live with it until they fixed it or I found another way to hack it round.
+             */
+            sellerPassword: "AIZAfefra",
+            sellerBirthday: Date.now(),
+            sellerGender: 'female',
+            sellerAddress: 'sultan agung',
+            sellerPhoneNumber: '085612345678a'
+        }
+        client
+            .post('/api/v1/sellers/create')
+            .send(sellerDetails)
+            .end((err, resSeller) => {
+                console.log(resSeller)
+                let userDetails = {
+                    userName: "Miho Kaneko",
+                    userEmail: "miho@jjj7j.id",
+                    /**
+                     * This is done because no way to use async setter function in a sequelize model.
+                     * I know this is a clunky experience
+                     * Just live with it until they fixed it or I found another way to hack it round.
+                     */
+                    userPassword: "AIZAfefra",
+                    userBirthday: Date.now(),
+                    userGender: 'female',
+                    userAddress: 'sultan agung',
+                    userPhoneNumber: '085612345678'
+                }
+                client
+                    .post('/api/v1/users/create')
+                    .send(userDetails)
+                    .end((err, resUser) => {
+                        console.log(resUser)
+                        let orderDetail = {
+                            userId: resUser.body.id,
+                            sellerId: resSeller.body.id,
+                            orderItem: "resolder ram chips on my acer swift!",
+                            orderPrice: 300.0
+                        }
+                        client
+                            .post('/api/v1/users/authenticate')
+                            .send({
+                                phoneNumber: '085612345678',
+                                password: 'AIZAfefra'
+                            })
+                            .end((err, resAuth) => {
+                                
+                                client
+                                .post('/api/v1/orders/create')
+                                .set('X-Auth-Token', resAuth.body.token)
+                                .send(orderDetail)
+                                .end((err, res) => {
+                                    
+                                    expect(res.status).toBe(200)
+                                    expect(res.body.userId).toBe(resUser.body.id)
+                                    expect(res.body.sellerId).toBe(resSeller.body.id)
+                                    expect(res.body.orderItem).toBe(orderDetail.orderItem)
+                                    expect(res.body.orderPrice).toBe(orderDetail.orderPrice)
+                                    
+                                    done()
+                                })
+
+                            })
+                    })
+            })    
+        
+    })
 
 })
