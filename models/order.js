@@ -20,6 +20,10 @@ const Order = sequelize.define('order', {
     orderPrice: {
         type: Sequelize.DOUBLE,
         allowNull: false
+    },
+    accepted: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: null
     }
 }
 // , {

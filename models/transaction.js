@@ -16,6 +16,10 @@ const Transaction = sequelize.define('transaction', {
     },
     transactionMessage: {
         type: Sequelize.STRING
+    },
+    finalized: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: null
     }
 }
 // ,  {
